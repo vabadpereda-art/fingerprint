@@ -1,0 +1,44 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/zkfp-usb",
+    "crates/zkfp-image",
+    "crates/zkfp-match",
+    "crates/zkfp-template",
+    "crates/zkfp-db",
+    "crates/zkfp-capi",
+]
+
+[workspace.dependencies]
+# Error handling
+thiserror = "2"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+base64 = "0.22"
+
+# Logging
+log = "0.4"
+env_logger = "0.11"
+
+# USB
+rusb = "0.9"
+
+# Image processing
+image = "0.25"
+
+# Math
+nalgebra = "0.33"
+
+# DB
+rusqlite = { version = "0.32", features = ["bundled"] }
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# ML (optional, for neural matcher)
+linfa = "0.7"
+
+# Fingerprint SDK replacement
+nbis-rs = { path = "crates/nbis-rs" }

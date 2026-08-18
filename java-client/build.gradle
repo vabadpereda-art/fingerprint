@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.zkfp'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // JNA for calling the Rust C-API
+    implementation 'net.java.dev.jna:jna:5.14.0'
+
+    // PostgreSQL JDBC Driver
+    implementation 'org.postgresql:postgresql:42.7.2'
+
+    // HikariCP for connection pooling (standard practice)
+    implementation 'com.zaxxer:HikariCP:5.1.0'
+
+    // Modern Swing look and feel
+    implementation 'com.formdev:flatlaf:3.4.1'
+
+    // Logging
+    implementation 'org.slf4j:slf4j-simple:2.0.12'
+
+    // Simple JSON parsing for native DB payloads
+    implementation 'org.json:json:20240303'
+}
+
+application {
+    mainClass = 'com.zkfp.App'
+}
+
+tasks.named('run') {
+    systemProperty "jna.library.path", "sdk"
+}

@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "name": "Linux",
+      "compilerPath": "/usr/bin/g++",
+      "cStandard": "c11",
+      "cppStandard": "c++11",
+      "intelliSenseMode": "linux-gcc-x64",
+      "includePath": [
+        "${workspaceFolder}/crates/nbis-rs/ext/FingerJetFXOSE/FingerJetFXOSE/libFRFXLL/src/algorithm",
+        "${workspaceFolder}/crates/nbis-rs/ext/FingerJetFXOSE/FingerJetFXOSE/libFRFXLL/include",
+        "${workspaceFolder}/crates/nbis-rs/ext/FingerJetFXOSE/FingerJetFXOSE/libFJFX/include"
+      ],
+      "defines": [
+        "_CRT_SECURE_NO_WARNINGS",
+        "_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING"
+      ]
+    }
+  ],
+  "version": 4
+}

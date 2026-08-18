@@ -1,0 +1,8 @@
+target
+java-client/build
+java-client/.gradle
+.git
+.gitignore
+*.log
+hs_err_pid*
+*.db

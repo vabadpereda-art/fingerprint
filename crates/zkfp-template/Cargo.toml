@@ -1,0 +1,13 @@
+[package]
+name = "zkfp-template"
+version = "0.1.0"
+edition = "2021"
+description = "Fingerprint template serialization (ANSI/ISO, merge, compact)"
+
+[dependencies]
+thiserror = { workspace = true }
+log = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+base64 = { workspace = true }
+nbis-rs = { workspace = true }

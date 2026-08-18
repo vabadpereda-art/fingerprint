@@ -1,0 +1,16 @@
+CompileFlags:
+  Compiler: g++
+  Add:
+    - -xc++
+    - -std=c++11
+    - -D_CRT_SECURE_NO_WARNINGS
+    - -D_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
+    - -Icrates/nbis-rs/ext/FingerJetFXOSE/FingerJetFXOSE/libFRFXLL/src/algorithm
+    - -Icrates/nbis-rs/ext/FingerJetFXOSE/FingerJetFXOSE/libFRFXLL/include
+    - -Icrates/nbis-rs/ext/FingerJetFXOSE/FingerJetFXOSE/libFJFX/include
+    - -isystem/usr/include/c++/13
+    - -isystem/usr/include/x86_64-linux-gnu/c++/13
+    - -isystem/usr/include/c++/13/backward
+    - -isystem/usr/lib/gcc/x86_64-linux-gnu/13/include
+    - -isystem/usr/include/x86_64-linux-gnu
+    - -isystem/usr/include

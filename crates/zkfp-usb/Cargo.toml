@@ -1,0 +1,10 @@
+[package]
+name = "zkfp-usb"
+version = "0.1.0"
+edition = "2021"
+description = "USB communication with ZKTeco ZK9500 fingerprint scanner"
+
+[dependencies]
+rusb.workspace = true
+thiserror = { workspace = true }
+log = { workspace = true }

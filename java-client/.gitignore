@@ -1,0 +1,11 @@
+build/
+bin/
+.gradle/
+**/gradle/
+*.class
+*.log
+hs_err_pid*
+
+# Datos y artefactos locales
+*.db
+*.db-*

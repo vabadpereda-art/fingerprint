@@ -1,0 +1,31 @@
+target/
+out/
+*.lock
+
+# Bases de datos y ficheros locales
+a*.db
+*.db
+*.db-*
+
+# Logs y volcados
+*.log
+hs_err_pid*
+
+# Binarios y librerías generadas
+*.so
+*.a
+*.dll
+*.dylib
+*.exe
+
+# Artefactos e imágenes de prueba
+*.wsq
+*.raw
+*.bmp
+*.png
+
+# Temporales y pruebas locales
+*.zip
+*.tmp
+*.temp
+test.rs

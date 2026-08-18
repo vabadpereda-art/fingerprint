@@ -1,0 +1,12 @@
+[package]
+name = "zkfp-match"
+version = "0.1.0"
+edition = "2021"
+description = "Fingerprint matching 1:1 and 1:N (elastic match, bozorth3-style)"
+
+[dependencies]
+zkfp-template = { path = "../zkfp-template" }
+thiserror = { workspace = true }
+log = { workspace = true }
+nbis-rs = { workspace = true }
+libc = "0.2"

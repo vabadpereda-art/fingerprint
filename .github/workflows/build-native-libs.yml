@@ -1,0 +1,112 @@
+name: Build native libraries
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    name: Build Linux shared library
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            clang \
+            cmake \
+            libssl-dev \
+            pkg-config \
+            python3 \
+            python3-pip \
+            libudev-dev \
+            libusb-1.0-0-dev
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry and target
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build zkfp-capi for Linux
+        run: cargo build --release -p zkfp-capi
+
+      - name: Collect Linux artifacts
+        run: |
+          mkdir -p out/linux
+          find target/release -maxdepth 1 \( \
+            -name 'libzkfp_capi.so' -o \
+            -name 'libzkfp_capi.a' \
+          \) -exec cp {} out/linux/ \;
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: zkfp-linux-artifacts
+          path: out/linux/
+          if-no-files-found: error
+
+  build-windows:
+    name: Build Windows DLL
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry and target
+        uses: Swatinem/rust-cache@v2
+
+      - name: Set up Python for native dependencies
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python build dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy
+
+      - name: Build zkfp-capi for Windows
+        shell: pwsh
+        env:
+          CMAKE_BUILD_TYPE: RelWithDebInfo
+        run: cargo build --release -p zkfp-capi
+
+      - name: Collect Windows artifacts
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path out/windows | Out-Null
+          $patterns = @(
+            'target/release/zkfp_capi.dll',
+            'target/release/zkfp_capi.lib',
+            'target/release/zkfp_capi.dll.a'
+          )
+          foreach ($pattern in $patterns) {
+            if (Test-Path $pattern) {
+              Copy-Item $pattern out/windows/
+            }
+          }
+          if (-not (Get-ChildItem out/windows -ErrorAction SilentlyContinue)) {
+            throw 'No Windows artifacts were generated.'
+          }
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: zkfp-windows-artifacts
+          path: out/windows/
+          if-no-files-found: error

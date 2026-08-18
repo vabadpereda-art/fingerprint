@@ -1,0 +1,67 @@
+stages:
+  - build
+
+# Variables globales. Cambiamos la ruta de cargo para poder cachearla.
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/.cargo
+
+# Plantilla de caché para Rust
+.rust_cache:
+  cache:
+    key:
+      files:
+        - Cargo.lock
+    paths:
+      - .cargo/registry/index/
+      - .cargo/registry/cache/
+      - .cargo/git/db/
+      - target/
+    policy: pull-push
+
+build-linux:
+  stage: build
+  # Usamos una imagen oficial de Rust (basada en Debian) que ya trae el compilador
+  image: rust:latest 
+  extends: .rust_cache
+  before_script:
+    # Instalamos las dependencias del sistema operativo equivalentes a tu apt-get
+    - apt-get update
+    - apt-get install -y build-essential clang cmake libssl-dev pkg-config python3 python3-pip libudev-dev libusb-1.0-0-dev
+  script:
+    - cargo build --release -p zkfp-capi
+    # Recolectamos los artefactos
+    - mkdir -p out/linux
+    - find target/release -maxdepth 1 \( -name 'libzkfp_capi.so' -o -name 'libzkfp_capi.a' \) -exec cp {} out/linux/ \;
+  artifacts:
+    name: "zkfp-linux-artifacts"
+    paths:
+      - out/linux/
+    expire_in: 1 week # El tiempo de retención de los artefactos en GitLab
+
+build-windows:
+  stage: build
+  extends: .rust_cache
+  # Los "tags" determinan qué Runner ejecuta esto. 
+  # 'saas-windows-medium-amd64' es el runner compartido de Windows en GitLab.com (SaaS).
+  # Si tienes runners propios, cámbialo por el tag correspondiente (ej. 'windows').
+  tags:
+    - saas-windows-medium-amd64 
+  before_script:
+    # Nota: Los runners compartidos de Windows en GitLab no siempre tienen Rust o Python instalados por defecto.
+    # Si te falta Rust o Python en tu runner, tendrías que instalarlos aquí (ej. usando choco).
+    - python -m pip install --upgrade pip
+    - python -m pip install numpy
+  script:
+    # GitLab CI en Windows usa PowerShell por defecto
+    - $env:CMAKE_BUILD_TYPE="RelWithDebInfo"
+    - cargo build --release -p zkfp-capi
+    # Recolectamos los artefactos
+    - New-Item -ItemType Directory -Force -Path out/windows | Out-Null
+    - $patterns = @('target/release/zkfp_capi.dll', 'target/release/zkfp_capi.lib', 'target/release/zkfp_capi.dll.a')
+    - foreach ($pattern in $patterns) { if (Test-Path $pattern) { Copy-Item $pattern out/windows/ } }
+    - if (-not (Get-ChildItem out/windows -ErrorAction SilentlyContinue)) { throw 'No Windows artifacts were generated.' }
+  artifacts:
+    name: "zkfp-windows-artifacts"
+    paths:
+      - out/windows/
+    expire_in: 1 week

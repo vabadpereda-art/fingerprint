@@ -1,0 +1,25 @@
+[package]
+name = "zkfp-db"
+version = "0.2.0"
+edition = "2021"
+description = "Generic ORM with offline-first SQLite and PostgreSQL sync"
+
+[dependencies]
+zkfp-template = { path = "../zkfp-template" }
+zkfp-match = { path = "../zkfp-match" }
+thiserror = { workspace = true }
+log = { workspace = true }
+rusqlite = { workspace = true }
+tokio = { version = "1", features = ["full"] }
+tokio-postgres = { version = "0.7", optional = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = "0.4"
+cron = "0.12"
+
+[features]
+default = ["postgres-sync"]
+postgres-sync = ["tokio-postgres"]
+
+[dev-dependencies]
+tokio-test = "0.4"

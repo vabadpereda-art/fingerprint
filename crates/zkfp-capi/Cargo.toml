@@ -1,0 +1,23 @@
+[package]
+name = "zkfp-capi"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+zkfp-db = { path = "../zkfp-db" }
+zkfp-usb = { path = "../zkfp-usb" }
+zkfp-image = { path = "../zkfp-image" }
+zkfp-match = { path = "../zkfp-match" }
+zkfp-template = { path = "../zkfp-template" }
+lazy_static = "1.4"
+nbis-rs = { workspace = true }
+serde_json = { workspace = true }
+chrono = "0.4"
+tokio = { version = "1", features = ["rt-multi-thread"] }
+rusqlite = { workspace = true }
+
+[build-dependencies]
+cc = "1"
+
+[lib]
+crate-type = ["cdylib"]
