@@ -48,11 +48,17 @@ set(EMBEDDED_RANDOM_FOREST_PARAMETER_FCT "0" CACHE STRING
     "ANSI/NIST-ITL 1-2011: Update 2015 friction ridge capture technology (FRCT) code for parameters to embed")
 
 if(MSVC)
-  set(OpenCV_DIR ${CMAKE_BINARY_DIR}/../../../install_staging/nfiq2/x64/vc17/staticlib)
+  find_package(OpenCV REQUIRED NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH HINTS
+    ${CMAKE_BINARY_DIR}/../../../install_staging/nfiq2/x64/vc17/staticlib
+    ${CMAKE_BINARY_DIR}/../../../install_staging/nfiq2/x64/vc18/staticlib
+    ${CMAKE_BINARY_DIR}/../../../install_staging/nfiq2/staticlib
+    ${CMAKE_BINARY_DIR}/../../../install_staging/nfiq2
+    ${CMAKE_BINARY_DIR}/../../../OpenCV-prefix/src/OpenCV-build
+  )
 else()
   set(OpenCV_DIR ${CMAKE_BINARY_DIR}/../../../OpenCV-prefix/src/OpenCV-build)
+  find_package(OpenCV REQUIRED NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH HINTS ${OpenCV_DIR})
 endif()
-find_package(OpenCV REQUIRED NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH HINTS ${OpenCV_DIR})
 set(OpenCV_SHARED ON)
 include_directories(${OpenCV_INCLUDE_DIRS})
 

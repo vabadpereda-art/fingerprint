@@ -21,11 +21,17 @@ include_directories("${SUPERBUILD_ROOT_PATH}/NFIQ2/NFIQ2Algorithm/include")
 include_directories("${SUPERBUILD_ROOT_PATH}/fingerjetfxose/FingerJetFXOSE/libFRFXLL/include")
 
 if(MSVC)
-  set(OpenCV_DIR ${CMAKE_BINARY_DIR}/../../../install_staging/nfiq2/x64/vc17/staticlib)
+  find_package(OpenCV REQUIRED NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH HINTS
+    ${CMAKE_BINARY_DIR}/../../../install_staging/nfiq2/x64/vc17/staticlib
+    ${CMAKE_BINARY_DIR}/../../../install_staging/nfiq2/x64/vc18/staticlib
+    ${CMAKE_BINARY_DIR}/../../../install_staging/nfiq2/staticlib
+    ${CMAKE_BINARY_DIR}/../../../install_staging/nfiq2
+    ${CMAKE_BINARY_DIR}/../../../OpenCV-prefix/src/OpenCV-build
+  )
 else()
   set(OpenCV_DIR ${CMAKE_BINARY_DIR}/../../../OpenCV-prefix/src/OpenCV-build)
+  find_package(OpenCV REQUIRED NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH HINTS ${OpenCV_DIR})
 endif()
-find_package(OpenCV REQUIRED NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH HINTS ${OpenCV_DIR})
 set(OpenCV_SHARED ON)
 include_directories(${OpenCV_INCLUDE_DIRS})
 

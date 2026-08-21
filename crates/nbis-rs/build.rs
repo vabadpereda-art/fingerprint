@@ -290,6 +290,14 @@ fn main() {
             "cargo:rustc-link-search=native={}/x64/vc17/staticlib",
             &lib_src_dir_str
         );
+        println!(
+            "cargo:rustc-link-search=native={}/x64/vc18/staticlib",
+            &lib_src_dir_str
+        );
+        println!(
+            "cargo:rustc-link-search=native={}/staticlib",
+            &lib_src_dir_str
+        );
         println!("cargo:rustc-link-lib=static=opencv_imgproc4100");
         println!("cargo:rustc-link-lib=static=opencv_ml4100");
         println!("cargo:rustc-link-lib=static=opencv_imgcodecs4100");
